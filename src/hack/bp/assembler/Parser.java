@@ -309,7 +309,7 @@ public class Parser
 			endIndexRightParen	= getCurrentTrimmedCommand().indexOf( ")" );
 			
 			symbol = getCurrentTrimmedCommand().substring( startIndexLeftParen + 1, 
-														   endIndexRightParen - 1 );
+															endIndexRightParen - 1 );
 		}
 	
 		return symbol;
