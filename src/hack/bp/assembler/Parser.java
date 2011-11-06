@@ -19,14 +19,16 @@ import java.util.Scanner;
  *			symbols. -bp
  *	0.2 -	Fixing access specifiers for a few methods. 
  *			Adding more useful comments -bp
+ *	0.3 -	Tons of fixes. Can now parse symbols.
  ***************************************************************************************/
 public class Parser 
 {
-	private File inputFile 	= null;
-	private Scanner scanner	= null;
-	private String currentCommand = "";
-	private int commandLength = -1;
-	
+	private File m_inputFile = null;
+	private Scanner m_scanner = null;
+	private String m_currentCommand = "";
+	private int m_commandLength = -1;
+	private int m_currentLineNumber = -1;
+
 	public Parser()
 	{
 		exit();
@@ -42,18 +44,19 @@ public class Parser
 	 *  reader. A scanner is initialized to allow class methods to read the file's
 	 *  contents. *** THIS MUST ALWAYS BE CALLED FIRST BEFORE USING THIS PARSER! ***
 	 *  Not doing so will keep the input file object and scanner null (therefore
-	 *  breaking the functionality of methods that depend on them).
+	 *  breaking the functionality of methods that depend on them). This is generally
+	 *  used only in the constructor.
 	 ***********************************************************************************/
 	private void init( String filePath )
 	{
 		// Initialize the file
-		if( this.inputFile == null )
-			this.inputFile = new File( filePath );
+		if( this.m_inputFile == null )
+			this.m_inputFile = new File( filePath );
 		
 		// Create a scanner to easily check file contents
 		try 
 		{
-			this.scanner = new Scanner( inputFile );
+			this.m_scanner = new Scanner( m_inputFile );
 		} 
 		catch (FileNotFoundException e) 
 		{
@@ -65,8 +68,33 @@ public class Parser
 	
 	/************************************************************************************
 	 * 	TODO:
-	 * 	Create re-initialization function to handle when inputFile has been re-set
+	 * 	Re-initializes the object properly after a new inputFile has been introduced
+	 *  to the stream.
 	 ***********************************************************************************/
+	private void reinit( File inputFile )
+	{
+		// Close the current scanner so everything is fresh
+		this.m_scanner.close();
+		
+		this.m_inputFile = inputFile;
+		
+		// Reset the default values
+		resetCurrentCommand();
+		resetCommandLength();
+		resetCurrentLineNumber();
+		
+		// Create a scanner to easily check file contents
+		try 
+		{
+			this.m_scanner = new Scanner( m_inputFile );
+		} 
+		catch (FileNotFoundException e) 
+		{
+			System.out.println( "ParserError-reinit: Scanner couldn't find file!" );
+			e.printStackTrace();
+			System.exit( 1 );
+		}
+	}
 	
 	/** exit() **************************************************************************
 	 *  It is common to not use System.exit() from within a class constructor. Instead
@@ -74,7 +102,8 @@ public class Parser
 	 ***********************************************************************************/
 	private void exit()
 	{
-		System.out.println( "ParserError-Parser(): Parser must be initialized with a filePath!" );
+		System.out.println( "ParserError-exit(): Parser must be initialized " +
+							"with a filePath!" );
 		System.exit( 1 );
 	}
 	
@@ -91,7 +120,7 @@ public class Parser
 	 ***********************************************************************************/
 	public File getInputFile() 
 	{
-		return inputFile;
+		return m_inputFile;
 	}
 	
 	/** setInputFile() ******************************************************************
@@ -100,11 +129,7 @@ public class Parser
 	 ***********************************************************************************/
 	private void setInputFile( File inputFile ) 
 	{
-		this.inputFile = inputFile;
-		/**
-		 * TODO:
-		 * Must complete proper init method for re-initialization
-		 */
+		reinit( inputFile );
 	}
 
 	/** getCurrentCommand() *************************************************************
@@ -112,7 +137,15 @@ public class Parser
 	 ***********************************************************************************/
 	public String getCurrentCommand() 
 	{
-		return currentCommand;
+		return m_currentCommand;
+	}
+	
+	/** getCurrentTrimmedCommand() ******************************************************
+	 *  Returns the current command without leading or trailing white spaces. 
+	 ***********************************************************************************/
+	public String getCurrentTrimmedCommand()
+	{
+		return getCurrentCommand().trim();
 	}
 	
 	/** setCurrentCommand() *************************************************************
@@ -120,7 +153,15 @@ public class Parser
 	 ***********************************************************************************/
 	private void setCurrentCommand( String command ) 
 	{
-		this.currentCommand = command;
+		this.m_currentCommand = command;
+	}
+	
+	/** resetCurrentCommand() ***********************************************************
+	 *  Resets the current command back to default state.
+	 ***********************************************************************************/
+	private void resetCurrentCommand()
+	{
+		this.m_currentCommand = "";;
 	}
 	
 	/** getCommandLength() **************************************************************
@@ -128,7 +169,15 @@ public class Parser
 	 ***********************************************************************************/
 	public int getCommandLength() 
 	{
-		return commandLength;
+		return m_commandLength;
+	}
+	
+	/** getTrimmedCommandLength() *******************************************************
+	 *  Returns the current command's trimmed length.
+	 ***********************************************************************************/
+	public int getTrimmedCommandLength()
+	{
+		return getCurrentCommand().trim().length();
 	}
 	
 	/** setCommandLength() **************************************************************
@@ -136,7 +185,42 @@ public class Parser
 	 ***********************************************************************************/
 	private void setCommandLength ( int commandLength )
 	{
-		this.commandLength = commandLength;
+		this.m_commandLength = commandLength;
+	}
+	
+	/** resetCommandLength() ************************************************************
+	 *  Resets the current command length back to default state.
+	 ***********************************************************************************/
+	private void resetCommandLength()
+	{
+		this.m_commandLength = -1;
+	}
+	
+	/** getCurrentLineNumber() **********************************************************
+	 *  Grabs the current line number.
+	 ***********************************************************************************/
+	public int getCurrentLineNumber() 
+	{
+		return m_currentLineNumber;
+	}
+
+	/** setCurrentLineNumber() **********************************************************
+	 *  Set the current command's line number. (This is used to determine addresses
+	 *  on memory). When a block label has been encountered, this is used to determimine
+	 *  the address of the first line of the block by adding 1 to the current line's
+	 *  number.
+	 ***********************************************************************************/
+	private void setCurrentLineNumber(int currentLineNumber) 
+	{
+		this.m_currentLineNumber = currentLineNumber;
+	}
+	
+	/** resetCurrentLineNumber() ********************************************************
+	 *  Resets the current line number back to the default state.
+	 ***********************************************************************************/
+	private void resetCurrentLineNumber()
+	{
+		this.m_currentLineNumber = -1;
 	}
 	
 	/** hasMoreCommands() ***************************************************************
@@ -147,7 +231,7 @@ public class Parser
 		boolean hasMoreCommands = false;
 		
 		// Check if there is input in the next line, set boolean flag true if so
-		if( this.scanner.hasNextLine() )
+		if( this.m_scanner.hasNextLine() )
 			hasMoreCommands = true;
 		
 		return hasMoreCommands;
@@ -161,10 +245,13 @@ public class Parser
 	public void advance()
 	{
 		// Read in a line and set it as the current command
-		setCurrentCommand( this.scanner.nextLine() );
+		setCurrentCommand( this.m_scanner.nextLine() );
 		
 		// Read the current command and set the command length
 		setCommandLength( getCurrentCommand().length() );
+		
+		// Set the line number of the current command
+		setCurrentLineNumber( getCurrentLineNumber() + 1 );
 	}
 	
 	/** commandType() *******************************************************************
@@ -203,21 +290,28 @@ public class Parser
 		// Initialize symbol and start indices
 		String symbol = "";
 		int startIndexAmp = -1;
-
-		// Grab the command starting after the @ and remove white spaces
-		if( ( getCommandLength() > 0 ) && ( getCurrentCommand().contains( "@" ) ) )
+		int startIndexLeftParen = -1;
+		int endIndexRightParen = -1;
+		
+		// Grab the trimmed command starting after the @
+		if( ( getCurrentTrimmedCommand().length() > 0 ) && 
+			( getCurrentTrimmedCommand().contains( "@" ) ) )
 		{
-			startIndexAmp = getCurrentCommand().indexOf( "@" );
-			symbol = getCurrentCommand().substring( startIndexAmp + 1 ).trim();
+			startIndexAmp = getCurrentTrimmedCommand().indexOf( "@" );
+			symbol = getCurrentTrimmedCommand().substring( startIndexAmp + 1 );
 		}
 		
-		// Handle (Xxx) case
-		/**
-		 *  TODO:
-		 *  Complete basic implementation before handling the symbols for labeling 
-		 *  blocks.
-		 */
-		
+		// Handle (Xxx) case where Xxx is a label
+		if( ( getCurrentTrimmedCommand().length()  > 0 ) && 
+			( !getCurrentTrimmedCommand().contains( "@" ) ) )
+		{
+			startIndexLeftParen = getCurrentTrimmedCommand().indexOf( "(" );
+			endIndexRightParen	= getCurrentTrimmedCommand().indexOf( ")" );
+			
+			symbol = getCurrentTrimmedCommand().substring( startIndexLeftParen + 1, 
+														   endIndexRightParen - 1 );
+		}
+	
 		return symbol;
 	}
 	
@@ -229,12 +323,12 @@ public class Parser
 	{
 		// Initialize dest
 		String dest = "";
-		
+			
 		// Split up the dest=comp command with the equal sign
-		String[] commandPieces = getCurrentCommand().split( "=" );
+		String[] commandPieces = getCurrentTrimmedCommand().split( "=" );
 		
-		// Take the first piece (the dest portion) and remove white spaces
-		dest = commandPieces[ 0 ].trim();
+		// Take the first piece (the dest portion)
+		dest = commandPieces[ 0 ];
 		
 		return dest;
 	}
@@ -252,23 +346,23 @@ public class Parser
 		String[] commandPieces = null;
 		
 		// dest=comp case
-		if( getCurrentCommand().contains( "=" ) )
+		if( getCurrentTrimmedCommand().contains( "=" ) )
 		{
 			// Split up the dest=comp command with the equal sign
-			commandPieces = getCurrentCommand().split( "=" );
+			commandPieces = getCurrentTrimmedCommand().split( "=" );
 			
-			// Take the second piece (comp portion) and remove white spaces
-			comp = commandPieces[ 1 ].trim();
+			// Take the second piece (comp portion) 
+			comp = commandPieces[ 1 ];
 		}
 		
 		// comp;jump case
-		if( getCurrentCommand().contains( ";" ) )
+		if( getCurrentTrimmedCommand().contains( ";" ) )
 		{
 			// Split up the comp;jump command with the semi-colon
-			commandPieces = getCurrentCommand().split( ";" );
+			commandPieces = getCurrentTrimmedCommand().split( ";" );
 			
-			// Take the first piece (comp portion) and remove white spaces
-			comp = commandPieces[ 0 ].trim();
+			// Take the first piece (comp portion) 
+			comp = commandPieces[ 0 ];
 		}
 					
 		return comp;
@@ -283,17 +377,14 @@ public class Parser
 		// Initialize jump
 		String jump = "";
 				
-		// Prepare the string array to hold command pieces after split
-		String[] commandPieces = null;
-		
 		// comp;jump case
-		if( getCurrentCommand().contains( ";") )
+		if( getCurrentTrimmedCommand().contains( ";") )
 		{
 			// Split up the comp;jump command with the semi-colon
-			commandPieces = getCurrentCommand().split( ";" );
+			String[] commandPieces = getCurrentTrimmedCommand().split( ";" );
 					
 			// Take the second piece (jump portion)
-			jump = commandPieces[ 1 ].trim();
+			jump = commandPieces[ 1 ];
 		}
 		
 		return jump;
