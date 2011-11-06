@@ -8,6 +8,9 @@ import java.util.Scanner;
  *  and provides convenient access to the command's components (fields and symbols). In
  *  addition, removes all whitespace and comments.
  *  
+ *  This version uses JDK 1.6 update 29. Please have this when attempting to run this
+ *  program.
+ *  
  *  @author bp
  *  
  *	@changes
@@ -17,10 +20,10 @@ import java.util.Scanner;
  ***************************************************************************************/
 public class Parser 
 {
-	private File inputFile 			= null;
-	private Scanner scanner			= null;
-	private String currentCommand 	= "";
-	private int commandLength		= -1;
+	private File inputFile 	= null;
+	private Scanner scanner	= null;
+	private String currentCommand = "";
+	private int commandLength = -1;
 	
 	public Parser()
 	{
