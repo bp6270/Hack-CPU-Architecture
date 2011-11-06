@@ -140,12 +140,12 @@ public class Parser
 		return m_currentCommand;
 	}
 	
-	/** getCurrentTrimmedCommand() ******************************************************
-	 *  Returns the current command without leading or trailing white spaces. 
+	/** getCurrentCommandWithoutWhiteSpaces() *******************************************
+	 *  Returns the current command without any white spaces. 
 	 ***********************************************************************************/
-	public String getCurrentTrimmedCommand()
+	public String getCurrentCommandWithoutWhiteSpaces()
 	{
-		return getCurrentCommand().trim();
+		return getCurrentCommand().trim().replaceAll( " ", "");
 	}
 	
 	/** setCurrentCommand() *************************************************************
@@ -175,9 +175,9 @@ public class Parser
 	/** getTrimmedCommandLength() *******************************************************
 	 *  Returns the current command's trimmed length.
 	 ***********************************************************************************/
-	public int getTrimmedCommandLength()
+	public int getCommandLengthWithoutWhiteSpaces()
 	{
-		return getCurrentCommand().trim().length();
+		return getCurrentCommandWithoutWhiteSpaces().length();
 	}
 	
 	/** setCommandLength() **************************************************************
@@ -294,22 +294,22 @@ public class Parser
 		int endIndexRightParen = -1;
 		
 		// Grab the trimmed command starting after the @
-		if( ( getCurrentTrimmedCommand().length() > 0 ) && 
-			( getCurrentTrimmedCommand().contains( "@" ) ) )
+		if( ( getCommandLengthWithoutWhiteSpaces() > 0 ) && 
+			( getCurrentCommandWithoutWhiteSpaces().contains( "@" ) ) )
 		{
-			startIndexAmp = getCurrentTrimmedCommand().indexOf( "@" );
-			symbol = getCurrentTrimmedCommand().substring( startIndexAmp + 1 );
+			startIndexAmp = getCurrentCommandWithoutWhiteSpaces().indexOf( "@" );
+			symbol = getCurrentCommandWithoutWhiteSpaces().substring( startIndexAmp + 1 );
 		}
 		
 		// Handle (Xxx) case where Xxx is a label
-		if( ( getCurrentTrimmedCommand().length()  > 0 ) && 
-			( !getCurrentTrimmedCommand().contains( "@" ) ) )
+		if( ( getCommandLengthWithoutWhiteSpaces() > 0 ) && 
+			( !getCurrentCommandWithoutWhiteSpaces().contains( "@" ) ) )
 		{
-			startIndexLeftParen = getCurrentTrimmedCommand().indexOf( "(" );
-			endIndexRightParen	= getCurrentTrimmedCommand().indexOf( ")" );
+			startIndexLeftParen = getCurrentCommandWithoutWhiteSpaces().indexOf( "(" );
+			endIndexRightParen	= getCurrentCommandWithoutWhiteSpaces().indexOf( ")" );
 			
-			symbol = getCurrentTrimmedCommand().substring( startIndexLeftParen + 1, 
-															endIndexRightParen - 1 );
+			symbol = getCurrentCommandWithoutWhiteSpaces()
+					.substring( startIndexLeftParen + 1, endIndexRightParen - 1 );
 		}
 	
 		return symbol;
@@ -323,13 +323,17 @@ public class Parser
 	{
 		// Initialize dest
 		String dest = "";
+		
+		if( ( getCommandLengthWithoutWhiteSpaces() > 0 ) &&
+				getCurrentCommandWithoutWhiteSpaces().contains( "=" ) )
+		{
+			// Split up the dest=comp command with the equal sign
+			String[] commandPieces = getCurrentCommandWithoutWhiteSpaces().split( "=" );
 			
-		// Split up the dest=comp command with the equal sign
-		String[] commandPieces = getCurrentTrimmedCommand().split( "=" );
-		
-		// Take the first piece (the dest portion)
-		dest = commandPieces[ 0 ];
-		
+			// Take the first piece (the dest portion)
+			dest = commandPieces[ 0 ];
+		}
+	
 		return dest;
 	}
 	
@@ -346,20 +350,22 @@ public class Parser
 		String[] commandPieces = null;
 		
 		// dest=comp case
-		if( getCurrentTrimmedCommand().contains( "=" ) )
+		if( ( getCommandLengthWithoutWhiteSpaces() > 0 ) && 
+				getCurrentCommandWithoutWhiteSpaces().contains( "=" ) )
 		{
 			// Split up the dest=comp command with the equal sign
-			commandPieces = getCurrentTrimmedCommand().split( "=" );
+			commandPieces = getCurrentCommandWithoutWhiteSpaces().split( "=" );
 			
 			// Take the second piece (comp portion) 
 			comp = commandPieces[ 1 ];
 		}
 		
 		// comp;jump case
-		if( getCurrentTrimmedCommand().contains( ";" ) )
+		if( ( getCommandLengthWithoutWhiteSpaces() > 0 ) && 
+				getCurrentCommandWithoutWhiteSpaces().contains( ";" ) )
 		{
 			// Split up the comp;jump command with the semi-colon
-			commandPieces = getCurrentTrimmedCommand().split( ";" );
+			commandPieces = getCurrentCommandWithoutWhiteSpaces().split( ";" );
 			
 			// Take the first piece (comp portion) 
 			comp = commandPieces[ 0 ];
@@ -378,10 +384,11 @@ public class Parser
 		String jump = "";
 				
 		// comp;jump case
-		if( getCurrentTrimmedCommand().contains( ";") )
+		if( ( getCommandLengthWithoutWhiteSpaces() > 0 ) && 
+				getCurrentCommandWithoutWhiteSpaces().contains( ";") )
 		{
 			// Split up the comp;jump command with the semi-colon
-			String[] commandPieces = getCurrentTrimmedCommand().split( ";" );
+			String[] commandPieces = getCurrentCommandWithoutWhiteSpaces().split( ";" );
 					
 			// Take the second piece (jump portion)
 			jump = commandPieces[ 1 ];
