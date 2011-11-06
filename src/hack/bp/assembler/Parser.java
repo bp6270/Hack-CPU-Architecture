@@ -50,7 +50,18 @@ public class Parser
 		
 		// Create a scanner to easily check file contents
 		if( this.scanner == null )
-			this.scanner = new Scanner( filePath );
+		{
+			try 
+			{
+				this.scanner = new Scanner( inputFile );
+			} 
+			catch (FileNotFoundException e) 
+			{
+				System.out.println( "ParserError-init: Scanner couldn't find file!" );
+				e.printStackTrace();
+				System.exit( 1 );
+			}
+		}
 	}
 	
 	/** exit() **************************************************************************
@@ -59,7 +70,7 @@ public class Parser
 	 ***********************************************************************************/
 	private void exit()
 	{
-		System.out.println( "ParserError: Parser must be initialized with a filePath!" );
+		System.out.println( "ParserError-Parser(): Parser must be initialized with a filePath!" );
 		System.exit( 1 );
 	}
 	
