@@ -20,6 +20,7 @@ import java.util.Scanner;
  *	0.2 -	Fixing access specifiers for a few methods. 
  *			Adding more useful comments -bp
  *	0.3 -	Tons of fixes. Can now parse symbols.
+ *	0.4	-	More useful functions. 
  ***************************************************************************************/
 public class Parser 
 {
