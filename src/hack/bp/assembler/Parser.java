@@ -17,6 +17,8 @@ import java.util.Scanner;
  *	0.1 - 	Initial implementation of Parser class. This 
  *			version will not translate programs that contain 
  *			symbols. -bp
+ *	0.2 -	Fixing access specifiers for a few methods. 
+ *			Adding more useful comments -bp
  ***************************************************************************************/
 public class Parser 
 {
@@ -49,20 +51,22 @@ public class Parser
 			this.inputFile = new File( filePath );
 		
 		// Create a scanner to easily check file contents
-		if( this.scanner == null )
+		try 
 		{
-			try 
-			{
-				this.scanner = new Scanner( inputFile );
-			} 
-			catch (FileNotFoundException e) 
-			{
-				System.out.println( "ParserError-init: Scanner couldn't find file!" );
-				e.printStackTrace();
-				System.exit( 1 );
-			}
+			this.scanner = new Scanner( inputFile );
+		} 
+		catch (FileNotFoundException e) 
+		{
+			System.out.println( "ParserError-init: Scanner couldn't find file!" );
+			e.printStackTrace();
+			System.exit( 1 );
 		}
 	}
+	
+	/************************************************************************************
+	 * 	TODO:
+	 * 	Create re-initialization function to handle when inputFile has been re-set
+	 ***********************************************************************************/
 	
 	/** exit() **************************************************************************
 	 *  It is common to not use System.exit() from within a class constructor. Instead
@@ -91,11 +95,16 @@ public class Parser
 	}
 	
 	/** setInputFile() ******************************************************************
-	 *  Sets the current inputFile assigned to the Parser instance.
+	 *  Sets the current inputFile assigned to the Parser instance. Once this is used,
+	 *  the instance must be reinitialized to notice the new file! 
 	 ***********************************************************************************/
-	public void setInputFile( File inputFile ) 
+	private void setInputFile( File inputFile ) 
 	{
 		this.inputFile = inputFile;
+		/**
+		 * TODO:
+		 * Must complete proper init method for re-initialization
+		 */
 	}
 
 	/** getCurrentCommand() *************************************************************
@@ -109,7 +118,7 @@ public class Parser
 	/** setCurrentCommand() *************************************************************
 	 *  Sets the current command.
 	 ***********************************************************************************/
-	public void setCurrentCommand( String command ) 
+	private void setCurrentCommand( String command ) 
 	{
 		this.currentCommand = command;
 	}
@@ -125,7 +134,7 @@ public class Parser
 	/** setCommandLength() **************************************************************
 	 *  Sets the current command's length.
 	 ***********************************************************************************/
-	public void setCommandLength ( int commandLength )
+	private void setCommandLength ( int commandLength )
 	{
 		this.commandLength = commandLength;
 	}
