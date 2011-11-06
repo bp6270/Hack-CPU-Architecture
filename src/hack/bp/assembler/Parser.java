@@ -111,7 +111,7 @@ public class Parser
 	/** setCommandLength() **************************************************************
 	 *  Sets the current command's length.
 	 ***********************************************************************************/
-	public void setCommandLength (int commandLength )
+	public void setCommandLength ( int commandLength )
 	{
 		this.commandLength = commandLength;
 	}
@@ -184,7 +184,7 @@ public class Parser
 		// Grab the command starting after the @ and remove white spaces
 		if( getCommandLength() > 0 && getCurrentCommand().contains( "@" ) )
 		{
-			startIndexAmp = getCurrentCommand().indexOf( "@");
+			startIndexAmp = getCurrentCommand().indexOf( "@" );
 			symbol = getCurrentCommand().substring( startIndexAmp + 1 ).trim();
 		}
 		
@@ -239,7 +239,7 @@ public class Parser
 		}
 		
 		// comp;jump case
-		if( getCurrentCommand().contains( ";") )
+		if( getCurrentCommand().contains( ";" ) )
 		{
 			// Split up the comp;jump command with the semi-colon
 			commandPieces = getCurrentCommand().split( ";" );
