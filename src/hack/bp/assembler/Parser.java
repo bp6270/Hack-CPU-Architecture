@@ -205,7 +205,7 @@ public class Parser
 		int startIndexAmp = -1;
 
 		// Grab the command starting after the @ and remove white spaces
-		if( getCommandLength() > 0 && getCurrentCommand().contains( "@" ) )
+		if( ( getCommandLength() > 0 ) && ( getCurrentCommand().contains( "@" ) ) )
 		{
 			startIndexAmp = getCurrentCommand().indexOf( "@" );
 			symbol = getCurrentCommand().substring( startIndexAmp + 1 ).trim();
