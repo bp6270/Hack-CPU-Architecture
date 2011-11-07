@@ -1,7 +1,5 @@
 package hack.bp.assembler;
 
-import java.lang.System;
-
 public class Assembler 
 {
 	public static void main(String[] args) 
