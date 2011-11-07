@@ -75,7 +75,7 @@ public class Assembler
 				{
 					int paddingCount = ADDRESS_LENGTH - tempCode.length();
 					
-					// append the A_COMMAND prefix
+					// Append the A_COMMAND prefix
 					output += "0";
 				
 					// Pad the output to conform to the machine code specs
@@ -97,7 +97,7 @@ public class Assembler
 				// Set the current address of the instruction
 				parser.setCurrentLineNumber( parser.getCurrentLineNumber() + 1 );
 				
-				// Append the opcode
+				// Append the C_COMMAND prefix
 				output += "111";
 				
 				// Construct the machine code
