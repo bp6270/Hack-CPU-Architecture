@@ -113,7 +113,7 @@ public class Parser
 	 *  an unrecognized command is given. This, along with the L_COMMAND does not
 	 *  exist in the actual Hack Architecture specification.
 	 ***********************************************************************************/
-	public enum Commands { A_COMMAND, C_COMMAND, L_COMMAND, BAD_COMMAND }
+	public static enum Commands { A_COMMAND, C_COMMAND, L_COMMAND, BAD_COMMAND }
 	
 	/** getInputFile() ******************************************************************
 	 *  Returns the current inputFile assigned to the Parser instance.  
@@ -266,7 +266,7 @@ public class Parser
 		// Initialize default command
 		Commands cmd = Commands.BAD_COMMAND;
 		
-		// A-register commands always contain @ as a prefix
+		// A-register commands always contain @ as a prefix (@(xxx) is allowed)
 		if( getCurrentCommand().contains( "@" ) )
 			cmd = Commands.A_COMMAND;
 		
@@ -277,6 +277,14 @@ public class Parser
 		// Computational command in form of dest=comp
 		if( getCurrentCommand().contains( "=" ) )
 			cmd = Commands.C_COMMAND;
+		
+		// Handles (Xxx) labels
+		if( getCurrentCommand().contains( "(" ) &&
+			getCurrentCommand().contains( ")" ) &&
+			( !getCurrentCommand().contains( "@" ) ) )
+		{
+			cmd = Commands.L_COMMAND;
+		}
 		
 		return cmd;
 	}
