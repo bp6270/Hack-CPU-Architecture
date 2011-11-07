@@ -51,7 +51,7 @@ public class Code
 	
 	/** comp() **************************************************************************
 	 *  Returns the machine code that corresponds to the comp mnemonics. Note
-	 *  that that 'a' bit in a C_COMMAND is appended as a prefix in the 
+	 *  that the 'a' bit in a C_COMMAND is appended as a prefix in the 
 	 *  stringBits. (28 types)
 	 ***********************************************************************************/
 	public String comp( String mnemonic )
