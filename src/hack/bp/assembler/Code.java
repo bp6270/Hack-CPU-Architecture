@@ -46,12 +46,13 @@ public class Code
 		else if( mnemonic == "AMD" );
 			stringBits = "111";
 	
-		return stringBits;
-			
+		return stringBits;	
 	}
 	
 	/** comp() **************************************************************************
-	 *  Returns the machine code that corresponds to the comp mnemonics. (28 types)
+	 *  Returns the machine code that corresponds to the comp mnemonics. Note
+	 *  that that 'a' bit in a C_COMMAND is appended as a prefix in the 
+	 *  stringBits. (28 types)
 	 ***********************************************************************************/
 	public String comp( String mnemonic )
 	{
