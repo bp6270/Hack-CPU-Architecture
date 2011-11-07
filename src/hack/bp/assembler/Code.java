@@ -1,6 +1,8 @@
 package hack.bp.assembler;
 
 /** Code.java ***************************************************************************
+ * 	This file is used to translate Hack Architecture mnemonics to its equivalent binary 
+ *  form.	
  * 
  * 	@author bp
  *	
@@ -11,8 +13,15 @@ package hack.bp.assembler;
  *			only the if/if-else will be used, despite being 
  *			super messy. It is still faster than implementing
  *			using a hash-table. -bp
- *			
- */
+ *
+ *	0.2 -	Making significant fixes to the equality check.
+ *			Ignoring case completely to fix issue reading
+ *			string passed to it from the parser. This has
+ *			no side-effect. It actually allows flexibility
+ *			by not requiring all characters to be in caps. -bp
+ *
+ ***************************************************************************************/
+
 public class Code 
 {
 	/** dest() **************************************************************************
@@ -22,29 +31,45 @@ public class Code
 	{
 		String stringBits = "";
 		
-		if( mnemonic == "null" )
+		if( mnemonic.equalsIgnoreCase( "" ) )
+		{
 			stringBits = "000";
+		}
 		
-		else if( mnemonic == "M" )
+		else if( mnemonic.equalsIgnoreCase( "M" ) )
+		{
 			stringBits = "001";
+		}
 		
-		else if( mnemonic == "D" )
+		else if( mnemonic .equalsIgnoreCase( "D" ) )
+		{
 			stringBits = "010";
+		}
 		
-		else if( mnemonic == "MD" )
+		else if( mnemonic.equalsIgnoreCase( "MD" ) )
+		{
 			stringBits = "011";
+		}
 		
-		else if( mnemonic == "A" )
+		else if( mnemonic.equalsIgnoreCase( "A" ) )
+		{
 			stringBits = "100";
+		}
 		
-		else if( mnemonic == "AM" )
+		else if( mnemonic.equalsIgnoreCase( "AM" ) )
+		{
 			stringBits = "101";
+		}
 		
-		else if( mnemonic == "AD" )
+		else if( mnemonic.equalsIgnoreCase( "AD" ) )
+		{
 			stringBits = "110";
+		}
 		
-		else if( mnemonic == "AMD" );
+		else if( mnemonic.equalsIgnoreCase( "AMD" ) )
+		{
 			stringBits = "111";
+		}
 	
 		return stringBits;	
 	}
@@ -58,89 +83,145 @@ public class Code
 	{
 		String stringBits = "";
 		
-		if( mnemonic == "0" )
+		if( mnemonic.equalsIgnoreCase( "0" ) )
+		{
 			stringBits = "0101010";
+		}
 		
-		else if( mnemonic == "1" )
+		else if( mnemonic.equalsIgnoreCase( "1" ) )
+		{
 			stringBits = "0111111";
+		}
 		
-		else if( mnemonic == "-1" )
+		else if( mnemonic.equalsIgnoreCase( "-1" ) )
+		{
 			stringBits = "0111010";
+		}
 		
-		else if( mnemonic == "D" )
+		else if( mnemonic.equalsIgnoreCase( "D" ) )
+		{
 			stringBits = "0001100";
+		}
 		
-		else if( mnemonic == "A" )
+		else if( mnemonic.equalsIgnoreCase( "A" ) )
+		{
 			stringBits = "0110000";
+		}
 		
-		else if( mnemonic == "M" )
+		else if( mnemonic.equalsIgnoreCase( "M" ) )
+		{
 			stringBits = "1110000";
+		}
 		
-		else if( mnemonic == "!D" )
+		else if( mnemonic.equalsIgnoreCase( "!D" ) )
+		{
 			stringBits = "0001101";
+		}
 		
-		else if( mnemonic == "!A" )
+		else if( mnemonic.equalsIgnoreCase( "!A" ) )
+		{
 			stringBits = "0110011";
+		}
 		
-		else if( mnemonic == "!M" )
+		else if( mnemonic.equalsIgnoreCase( "!M" ) )
+		{
 			stringBits = "1110001";
+		}
 		
-		else if( mnemonic == "-D" )
+		else if( mnemonic.equalsIgnoreCase( "-D" ) )
+		{
 			stringBits = "0001111";
+		}
 		
-		else if( mnemonic == "-A" )
+		else if( mnemonic.equalsIgnoreCase( "-A" ) )
+		{
 			stringBits = "0110011";
+		}
 		
-		else if( mnemonic == "-M" )
+		else if( mnemonic.equalsIgnoreCase( "-M" ) )
+		{
 			stringBits = "1110011";
+		}
 		
-		else if( mnemonic == "D+1" )
+		else if( mnemonic.equalsIgnoreCase( "D+1" ) )
+		{
 			stringBits = "0011111";
+		}
 		
-		else if( mnemonic == "A+1" )
+		else if( mnemonic.equalsIgnoreCase( "A+1" ) )
+		{
 			stringBits = "0110111";
+		}
 		
-		else if( mnemonic == "M+1" )
+		else if( mnemonic.equalsIgnoreCase( "M+1" ) )
+		{
 			stringBits = "1110111";
+		}
 		
-		else if( mnemonic == "D-1" )
+		else if( mnemonic.equalsIgnoreCase( "D-1" ) )
+		{
 			stringBits = "0001110";
+		}
 		
-		else if( mnemonic == "A-1" )
+		else if( mnemonic.equalsIgnoreCase( "A-1" ) )
+		{
 			stringBits = "0110010";
+		}
 		
-		else if( mnemonic == "M-1" )
+		else if( mnemonic.equalsIgnoreCase( "M-1" ) )
+		{
 			stringBits = "1110010";
+		}
 		
-		else if( mnemonic == "D+A" )
+		else if( mnemonic.equalsIgnoreCase( "D+A" ) )
+		{
 			stringBits = "0000010";
+		}
 		
-		else if( mnemonic == "D+M" )
+		else if( mnemonic.equalsIgnoreCase( "D+M" ) )
+		{
 			stringBits = "1000010";
+		}
 		
-		else if( mnemonic == "D-A" )
+		else if( mnemonic.equalsIgnoreCase( "D-A" ) )
+		{
 			stringBits = "0010011";
+		}
 		
-		else if( mnemonic == "D-M" )
+		else if( mnemonic.equalsIgnoreCase( "D-M" ) )
+		{
 			stringBits = "1010011";
+		}
 		
-		else if( mnemonic == "A-D" )
+		else if( mnemonic.equalsIgnoreCase( "A-D" ) )
+		{
 			stringBits = "0000111";
+		}
 		
-		else if( mnemonic == "M-D" )
+		else if( mnemonic.equalsIgnoreCase( "M-D" ) )
+		{
 			stringBits = "1000111";
+		}
 		
-		else if( mnemonic == "D&A" )
+		else if( mnemonic.equalsIgnoreCase( "D&A" ) )
+		{
 			stringBits = "0000000";
+		}
 		
-		else if( mnemonic == "D&M" )
+		else if( mnemonic.equalsIgnoreCase( "D&M" ) )
+		{
 			stringBits = "1000000";
+		}
 		
-		else if( mnemonic == "D|A" )
+		else if( mnemonic.equalsIgnoreCase( "D|A" ) )
+		{
 			stringBits = "0010101";
+		}
 		
-		else if( mnemonic == "D|M" )
+		else if( mnemonic.equalsIgnoreCase( "D|M" ) )
+		{
 			stringBits = "1010101";
+		}
 		
 		return stringBits;
 	}
@@ -152,29 +233,45 @@ public class Code
 	{
 		String stringBits = "";
 		
-		if( mnemonic == "null" )
+		if( mnemonic.isEmpty() )
+		{
 			stringBits = "000";
+		}
 		
-		else if( mnemonic == "JGT" )
+		else if( mnemonic.equalsIgnoreCase( "JGT" )  )
+		{
 			stringBits = "001";
+		}
 		
-		else if( mnemonic == "JEQ" )
+		else if( mnemonic.equalsIgnoreCase( "JEQ" ) )
+		{
 			stringBits = "010";
+		}
 		
-		else if( mnemonic == "JGE" )
+		else if( mnemonic.equalsIgnoreCase( "JGE" ) )
+		{
 			stringBits = "001";
+		}
 		
-		else if( mnemonic == "JLT" )
+		else if( mnemonic.equalsIgnoreCase( "JLT" ) )
+		{
 			stringBits = "100";
+		}
 		
-		else if( mnemonic == "JNE" )
+		else if( mnemonic.equalsIgnoreCase( "JNE" ) )
+		{
 			stringBits = "101";
+		}
 		
-		else if( mnemonic == "JLE" )
+		else if( mnemonic.equalsIgnoreCase( "JLE" ) )
+		{
 			stringBits = "110";
+		}
 		
-		else if( mnemonic == "JMP" )
+		else if( mnemonic.equalsIgnoreCase( "JMP" ) )
+		{
 			stringBits = "111";
+		}
 		
 		return stringBits;
 	}

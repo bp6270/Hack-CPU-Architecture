@@ -21,6 +21,7 @@ import java.util.Scanner;
  *			Adding more useful comments -bp
  *	0.3 -	Tons of fixes. Can now parse symbols. -bp
  *	0.4	-	More useful functions. -bp
+ *	0.5	-	Minor fixes. -bp
  ***************************************************************************************/
 public class Parser 
 {
@@ -145,7 +146,7 @@ public class Parser
 	 ***********************************************************************************/
 	public String getCurrentCommandWithoutWhiteSpaces()
 	{
-		return getCurrentCommand().trim().replaceAll( " ", "");
+		return getCurrentCommand().replaceAll( " ", "");
 	}
 	
 	/** setCurrentCommand() *************************************************************
@@ -210,7 +211,7 @@ public class Parser
 	 *  the address of the first line of the block by adding 1 to the current line's
 	 *  number.
 	 ***********************************************************************************/
-	private void setCurrentLineNumber(int currentLineNumber) 
+	public void setCurrentLineNumber(int currentLineNumber) 
 	{
 		this.m_currentLineNumber = currentLineNumber;
 	}
@@ -249,9 +250,6 @@ public class Parser
 		
 		// Read the current command and set the command length
 		setCommandLength( getCurrentCommand().length() );
-		
-		// Set the line number of the current command
-		setCurrentLineNumber( getCurrentLineNumber() + 1 );
 	}
 	
 	/** commandType() *******************************************************************
@@ -311,7 +309,9 @@ public class Parser
 		
 		// Handle (Xxx) case where Xxx is a label
 		if( ( getCommandLengthWithoutWhiteSpaces() > 0 ) && 
-			( !getCurrentCommandWithoutWhiteSpaces().contains( "@" ) ) )
+			( !getCurrentCommandWithoutWhiteSpaces().contains( "@" ) ) &&
+			( getCurrentCommandWithoutWhiteSpaces().contains( "(" ) ) &&
+			( getCurrentCommandWithoutWhiteSpaces().contains( ")" ) ) )
 		{
 			startIndexLeftParen = getCurrentCommandWithoutWhiteSpaces().indexOf( "(" );
 			endIndexRightParen	= getCurrentCommandWithoutWhiteSpaces().indexOf( ")" );
