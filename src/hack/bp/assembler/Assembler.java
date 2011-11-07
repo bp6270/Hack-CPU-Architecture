@@ -1,6 +1,6 @@
 package hack.bp.assembler;
 
-import java.util.Timer;
+import java.lang.System;
 
 public class Assembler 
 {
@@ -21,6 +21,9 @@ public class Assembler
 	
 	public static void run( String fileName )
 	{
+		// Start the timer for run()
+		long timerStart = System.nanoTime();
+	
 		Parser parser = new Parser( fileName );
 		Code code = new Code();
 		String output = "";
@@ -51,11 +54,12 @@ public class Assembler
 					output += tempCode;
 					output += "\n";
 				}
-				
-				System.out.println( output );
 			}
 		}
 		
-		System.out.println( "Assembly completed!" );
+		System.out.println( output );
+		long timerEnd = System.nanoTime();
+		System.out.println( "Assembly completed! (elapsed time: " +
+							( timerEnd - timerStart ) + "ns)\n");
 	}
 }
