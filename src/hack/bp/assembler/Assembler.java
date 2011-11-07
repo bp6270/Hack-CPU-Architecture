@@ -1,6 +1,6 @@
 package hack.bp.assembler;
 
-import hack.bp.assembler.Parser;
+import java.util.Timer;
 
 public class Assembler 
 {
@@ -8,8 +8,8 @@ public class Assembler
 	{
 		if( args.length > 0 )
 		{
-			if( args[0].endsWith( ".asm" ) )
-				run( args[0] );
+			if( args[ 0 ].endsWith( ".asm" ) )
+				run( args[ 0 ] );
 			else
 				System.out.println( "Usage: <program> <fileName> " +
 					"\n\t -Can only use file with .asm extension.");
@@ -35,16 +35,21 @@ public class Assembler
 			if( parser.commandType() == Parser.Commands.A_COMMAND )
 			{
 				String tempCode = "";
-				tempCode = parser.symbol();
+				int decAddress = Integer.parseInt( parser.symbol() );
+				tempCode = Integer.toBinaryString( decAddress );
 				
 				if( ( tempCode.length() < ADDRESS_LENGTH ) && ( tempCode.length() > 0 ) )
 				{
 					int paddingCount = ADDRESS_LENGTH - tempCode.length();
 					
+					// append the A_COMMAND prefix
+					output += "0";
+					
 					for( int i = 0; i < paddingCount; i++ )
 						output += "0";
 					
 					output += tempCode;
+					output += "\n";
 				}
 				
 				System.out.println( output );
