@@ -15,3 +15,15 @@ a basic assembler that can be tested against the book's assembler program.
 The code is my own implementation. It is not meant to be bullet-proof so there may
 be areas that need improvement. It will definitely be improved as I continue to
 work on it.
+
+Misc:
+-----
+Predefined symbols are: [SP - RAM ADDRESS]
+SP 		- 0
+LCL 	- 1
+ARG		- 2
+THIS	- 3
+THAT	- 4
+R0-R15	- 0-15
+SCREEN	- 16384
+KBD		- 24576

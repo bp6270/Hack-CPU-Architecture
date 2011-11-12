@@ -22,6 +22,8 @@ import java.util.Scanner;
  *	0.3 -	Tons of fixes. Can now parse symbols. -bp
  *	0.4	-	More useful functions. -bp
  *	0.5	-	Minor fixes. -bp
+ *	0.6 - 	Added ability to parse comments. -bp
+ *	0.7 -	Minor fixes. - bp
  ***************************************************************************************/
 public class Parser 
 {
@@ -146,7 +148,7 @@ public class Parser
 	 ***********************************************************************************/
 	public String getCurrentCommandWithoutWhiteSpaces()
 	{
-		return getCurrentCommand().replaceAll( " ", "");
+		return getCurrentCommand().replaceAll( "\\s", "" );
 	}
 	
 	/** setCurrentCommand() *************************************************************
@@ -269,11 +271,9 @@ public class Parser
 			cmd = Commands.A_COMMAND;
 		
 		// Computational command in form of comp;jump
-		if( getCurrentCommand().contains( ";" ) )
-			cmd = Commands.C_COMMAND;
-		
-		// Computational command in form of dest=comp
-		if( getCurrentCommand().contains( "=" ) )
+		if( ( getCurrentCommand().contains( ";" )  ||
+				getCurrentCommand().contains( "=" ) ) &&
+				( !getCurrentCommand().contains( "@" ) ) )
 			cmd = Commands.C_COMMAND;
 		
 		// Handles (Xxx) labels
@@ -282,7 +282,11 @@ public class Parser
 			( !getCurrentCommand().contains( "@" ) ) )
 		{
 			cmd = Commands.L_COMMAND;
-		}
+		}		
+		
+		// Handles comments (this does not handle in-line comments)
+		if( getCurrentCommand().contains( "//" ) )
+			cmd = Commands.BAD_COMMAND;
 		
 		return cmd;
 	}
@@ -317,8 +321,15 @@ public class Parser
 			endIndexRightParen	= getCurrentCommandWithoutWhiteSpaces().indexOf( ")" );
 			
 			symbol = getCurrentCommandWithoutWhiteSpaces()
-					.substring( startIndexLeftParen + 1, endIndexRightParen - 1 );
+					.substring( startIndexLeftParen + 1, endIndexRightParen );
 		}
+		
+		// Do nothing if a comment is encountered
+		if( ( getCommandLengthWithoutWhiteSpaces() > 0 ) &&
+				( getCurrentCommandWithoutWhiteSpaces().contains( "//" ) ) )
+		{}
+		
+			
 	
 		return symbol;
 	}
