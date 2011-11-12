@@ -421,6 +421,11 @@ public class Parser
 			jump = commandPieces[ 1 ];
 		}
 		
+		// Do nothing if a comment is encountered
+		if( ( getCommandLengthWithoutWhiteSpaces() > 0 ) &&
+				( getCurrentCommandWithoutWhiteSpaces().contains( "//" ) ) )
+			jump = "";
+		
 		return jump;
 	}
 }
