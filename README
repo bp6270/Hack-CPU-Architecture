@@ -14,7 +14,7 @@ Architecture (ISA). The motivation for this project is to be able to create
 a basic assembler that can be tested against the book's assembler program.
 The code is my own implementation. It is not meant to be bullet-proof so there may
 be areas that need improvement. It will definitely be improved as I continue to
-work on it.
+work on it. Javadocs have been included and can be found in the /doc directory.
 
 Current Version:
 ----------------
