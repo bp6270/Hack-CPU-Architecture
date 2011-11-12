@@ -16,6 +16,16 @@ The code is my own implementation. It is not meant to be bullet-proof so there m
 be areas that need improvement. It will definitely be improved as I continue to
 work on it.
 
+Current Version:
+----------------
+0.3 -	Basic functionality completed. Can use comments as long as it's in its own line.
+
+Test Files/Output:
+-----------
+add.asm - This the same code from the book without in-line comments. 
+add.hack - This is the binary output created by my assembler.
+addComparison-Original.hack - This is the binary comparison file produced by the author's assembler.
+
 Misc:
 -----
 Predefined symbols are: [SP - RAM ADDRESS]
