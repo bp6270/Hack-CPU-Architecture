@@ -327,10 +327,8 @@ public class Parser
 		// Do nothing if a comment is encountered
 		if( ( getCommandLengthWithoutWhiteSpaces() > 0 ) &&
 				( getCurrentCommandWithoutWhiteSpaces().contains( "//" ) ) )
-		{}
+			symbol = "";
 		
-			
-	
 		return symbol;
 	}
 	
@@ -352,6 +350,11 @@ public class Parser
 			// Take the first piece (the dest portion)
 			dest = commandPieces[ 0 ];
 		}
+		
+		// Do nothing if a comment is encountered
+		if( ( getCommandLengthWithoutWhiteSpaces() > 0 ) &&
+				( getCurrentCommandWithoutWhiteSpaces().contains( "//" ) ) )
+			dest = "";
 	
 		return dest;
 	}
@@ -389,6 +392,11 @@ public class Parser
 			// Take the first piece (comp portion) 
 			comp = commandPieces[ 0 ];
 		}
+		
+		// Do nothing if a comment is encountered
+		if( ( getCommandLengthWithoutWhiteSpaces() > 0 ) &&
+				( getCurrentCommandWithoutWhiteSpaces().contains( "//" ) ) )
+			comp = "";
 					
 		return comp;
 	}
