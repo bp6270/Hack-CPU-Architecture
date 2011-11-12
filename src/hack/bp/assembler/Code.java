@@ -1,6 +1,6 @@
 package hack.bp.assembler;
 
-/** Code.java ***************************************************************************
+/****************************************************************************************
  * 	This file is used to translate Hack Architecture mnemonics to its equivalent binary 
  *  form.	
  * 
@@ -24,7 +24,7 @@ package hack.bp.assembler;
 
 public class Code 
 {
-	/** dest() **************************************************************************
+	/************************************************************************************
 	 *  Returns the machine code that corresponds to the dest mnemonics. (8 types)
 	 ***********************************************************************************/
 	public String dest( String mnemonic )
@@ -74,7 +74,7 @@ public class Code
 		return stringBits;	
 	}
 	
-	/** comp() **************************************************************************
+	/************************************************************************************
 	 *  Returns the machine code that corresponds to the comp mnemonics. Note
 	 *  that the 'a' bit in a C_COMMAND is appended as a prefix in the 
 	 *  stringBits. (28 types)
@@ -226,7 +226,7 @@ public class Code
 		return stringBits;
 	}
 	
-	/** jump() **************************************************************************
+	/************************************************************************************
 	 *  Returns the machine code that corresponds to the jump mnemonics.
 	 ***********************************************************************************/
 	public String jump( String mnemonic )

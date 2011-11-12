@@ -3,7 +3,7 @@ package hack.bp.assembler;
 import java.io.*;
 import java.util.Scanner;
 
-/** Parser.java *************************************************************************
+/****************************************************************************************
  *  Encapsulates access to the input code. Reads an assembly language command, parses it,
  *  and provides convenient access to the command's components (fields and symbols). In
  *  addition, removes all whitespace and comments.
@@ -43,7 +43,7 @@ public class Parser
 		init( filePath );
 	}
 	
-	/** init() **************************************************************************
+	/************************************************************************************
 	 *  Initializes the Parser instance with the current file and then sets up the
 	 *  reader. A scanner is initialized to allow class methods to read the file's
 	 *  contents. *** THIS MUST ALWAYS BE CALLED FIRST BEFORE USING THIS PARSER! ***
@@ -70,7 +70,7 @@ public class Parser
 		}
 	}
 	
-	/** reinit() ************************************************************************
+	/************************************************************************************
 	 * 	Re-initializes the object properly after a new inputFile has been introduced
 	 *  to the stream.
 	 ***********************************************************************************/
@@ -99,7 +99,7 @@ public class Parser
 		}
 	}
 	
-	/** exit() **************************************************************************
+	/************************************************************************************
 	 *  It is common to not use System.exit() from within a class constructor. Instead
 	 *  it is better to let a method handle that function.
 	 ***********************************************************************************/
@@ -110,7 +110,7 @@ public class Parser
 		System.exit( 1 );
 	}
 	
-	/** Commands{} **********************************************************************
+	/************************************************************************************
 	 *  Enumerations for the commands-types that exist for HACK (minus BAD_COMMAND).
 	 *  BAD_COMMAND is used strictly to set a default value for the command type in-case
 	 *  an unrecognized command is given. This, along with the L_COMMAND does not
@@ -118,7 +118,7 @@ public class Parser
 	 ***********************************************************************************/
 	public static enum Commands { A_COMMAND, C_COMMAND, L_COMMAND, BAD_COMMAND }
 	
-	/** getInputFile() ******************************************************************
+	/************************************************************************************
 	 *  Returns the current inputFile assigned to the Parser instance.  
 	 ***********************************************************************************/
 	public File getInputFile() 
@@ -126,7 +126,7 @@ public class Parser
 		return m_inputFile;
 	}
 	
-	/** setInputFile() ******************************************************************
+	/************************************************************************************
 	 *  Sets the current inputFile assigned to the Parser instance. Once this is used,
 	 *  the instance must be reinitialized to notice the new file! 
 	 ***********************************************************************************/
@@ -135,7 +135,7 @@ public class Parser
 		reinit( inputFile );
 	}
 
-	/** getCurrentCommand() *************************************************************
+	/************************************************************************************
 	 *  Returns the current command. 
 	 ***********************************************************************************/
 	public String getCurrentCommand() 
@@ -143,7 +143,7 @@ public class Parser
 		return m_currentCommand;
 	}
 	
-	/** getCurrentCommandWithoutWhiteSpaces() *******************************************
+	/** *********************************************************************************
 	 *  Returns the current command without any white spaces. 
 	 ***********************************************************************************/
 	public String getCurrentCommandWithoutWhiteSpaces()
@@ -151,7 +151,7 @@ public class Parser
 		return getCurrentCommand().replaceAll( "\\s", "" );
 	}
 	
-	/** setCurrentCommand() *************************************************************
+	/************************************************************************************
 	 *  Sets the current command.
 	 ***********************************************************************************/
 	private void setCurrentCommand( String command ) 
@@ -159,15 +159,15 @@ public class Parser
 		this.m_currentCommand = command;
 	}
 	
-	/** resetCurrentCommand() ***********************************************************
+	/************************************************************************************
 	 *  Resets the current command back to default state.
 	 ***********************************************************************************/
 	private void resetCurrentCommand()
 	{
-		this.m_currentCommand = "";;
+		this.m_currentCommand = "";
 	}
 	
-	/** getCommandLength() **************************************************************
+	/************************************************************************************
 	 *  Returns the current command's length.
 	 ***********************************************************************************/
 	public int getCommandLength() 
@@ -175,15 +175,15 @@ public class Parser
 		return m_commandLength;
 	}
 	
-	/** getTrimmedCommandLength() *******************************************************
-	 *  Returns the current command's trimmed length.
+	/************************************************************************************
+	 *  Returns the current command's length without spaces.
 	 ***********************************************************************************/
 	public int getCommandLengthWithoutWhiteSpaces()
 	{
 		return getCurrentCommandWithoutWhiteSpaces().length();
 	}
 	
-	/** setCommandLength() **************************************************************
+	/************************************************************************************
 	 *  Sets the current command's length.
 	 ***********************************************************************************/
 	private void setCommandLength ( int commandLength )
@@ -191,7 +191,7 @@ public class Parser
 		this.m_commandLength = commandLength;
 	}
 	
-	/** resetCommandLength() ************************************************************
+	/************************************************************************************
 	 *  Resets the current command length back to default state.
 	 ***********************************************************************************/
 	private void resetCommandLength()
@@ -199,7 +199,7 @@ public class Parser
 		this.m_commandLength = -1;
 	}
 	
-	/** getCurrentLineNumber() **********************************************************
+	/************************************************************************************
 	 *  Grabs the current line number.
 	 ***********************************************************************************/
 	public int getCurrentLineNumber() 
@@ -207,7 +207,7 @@ public class Parser
 		return m_currentLineNumber;
 	}
 
-	/** setCurrentLineNumber() **********************************************************
+	/************************************************************************************
 	 *  Set the current command's line number. (This is used to determine addresses
 	 *  on memory). When a block label has been encountered, this is used to determimine
 	 *  the address of the first line of the block by adding 1 to the current line's
@@ -218,7 +218,7 @@ public class Parser
 		this.m_currentLineNumber = currentLineNumber;
 	}
 	
-	/** resetCurrentLineNumber() ********************************************************
+	/************************************************************************************
 	 *  Resets the current line number back to the default state.
 	 ***********************************************************************************/
 	private void resetCurrentLineNumber()
@@ -226,7 +226,7 @@ public class Parser
 		this.m_currentLineNumber = -1;
 	}
 	
-	/** hasMoreCommands() ***************************************************************
+	/************************************************************************************
 	 *  Checks if there are more commands in the input. Stores a command
 	 ***********************************************************************************/
 	public boolean hasMoreCommands()
@@ -240,7 +240,7 @@ public class Parser
 		return hasMoreCommands;
 	}
 	
-	/** advance() ***********************************************************************
+	/************************************************************************************
 	 *  Reads the next command from the input and makes it the current command. Should
 	 *  be called only if hasMoreCommands() is true. Initially there is no current
 	 *  command.
@@ -254,7 +254,7 @@ public class Parser
 		setCommandLength( getCurrentCommand().length() );
 	}
 	
-	/** commandType() *******************************************************************
+	/************************************************************************************
 	 *  Returns the type of the current command:
 	 *  	- A_COMMAND for @Xxx where Xxx is either a symbol or a decimal number.
 	 *  	- C_COMMAND for dest=comp;jump
@@ -291,7 +291,7 @@ public class Parser
 		return cmd;
 	}
 	
-	/** symbol() ************************************************************************
+	/************************************************************************************
 	 *  Returns the symbol or decimal Xxx of the current command @Xxx or (Xxx). Should
 	 *  be called only when commandType() is A_COMMAND or L_COMMAND.
 	 ***********************************************************************************/
@@ -332,7 +332,7 @@ public class Parser
 		return symbol;
 	}
 	
-	/** dest() **************************************************************************
+	/************************************************************************************
 	 *  Returns the dest mnemonic in the current C-command (8 possibilities). Should
 	 *  be called only when commandType() is C_COMMAND.
 	 ***********************************************************************************/
@@ -359,7 +359,7 @@ public class Parser
 		return dest;
 	}
 	
-	/** comp() **************************************************************************
+	/************************************************************************************
 	 *  Returns the comp mnemonic in the current C-command (28 possibilities). Should be
 	 *  called only when commandType() is C_COMMAND;
 	 ***********************************************************************************/
@@ -401,7 +401,7 @@ public class Parser
 		return comp;
 	}
 	
-	/** jump() **************************************************************************
+	/************************************************************************************
 	 *  Returns the jump mnemonic in the current C-command (8 possibilities). Should be
 	 *  called only when the commandType() is C_COMMAND;
 	 ***********************************************************************************/

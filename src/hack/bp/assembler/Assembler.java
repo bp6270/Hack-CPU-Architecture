@@ -3,7 +3,7 @@ package hack.bp.assembler;
 import java.io.*;
 import java.util.Hashtable;
 
-/** Assembler.java **********************************************************************
+/****************************************************************************************
  * 	This is the implementation of the Hack assembler.
  * 
  * 	@author bp
@@ -24,7 +24,7 @@ public class Assembler
 	private static int varStartAddress = 16;
 	private static Hashtable<String, Integer> m_symbolTable = null;
 
-	/** main() **************************************************************************
+	/************************************************************************************
 	 *  Fires off the assembler with run(). This function makes sure that an argument 
 	 *  has been passed-in before running the assembler.
 	 ***********************************************************************************/
@@ -44,7 +44,7 @@ public class Assembler
 					"\n\t -Enter an .asm file.");
 	}	
 
-	/** init() **************************************************************************
+	/************************************************************************************
 	 *  Pre-defined symbols for assembler. 
 	 ***********************************************************************************/
 	private static void init()
@@ -76,12 +76,12 @@ public class Assembler
 		m_symbolTable.put( "R14",	 	14 );
 		m_symbolTable.put( "R15",	   	15 );
 		m_symbolTable.put( "SCREEN", 	16384 );
-		m_symbolTable.put( "KBD", 	24576 );
+		m_symbolTable.put( "KBD", 		24576 );
 		
 		System.out.println( "Init: Completed pre-populating symbols table.." );
 	}
 
-	/** getNextAvailableAddress() *******************************************************
+	/************************************************************************************
 	 *  Will return the next available slot in the RAM that a variable can occupy.
 	 *  This does not check for overflow.
 	 ***********************************************************************************/
@@ -90,7 +90,7 @@ public class Assembler
 		return varStartAddress;
 	}
 	
-	/** setNextAvailableAddress() *******************************************************
+	/************************************************************************************
 	 *  Sets the next available address.
 	 ***********************************************************************************/
 	public static void setNextAvailableAddress( int nextAddress )
@@ -98,7 +98,7 @@ public class Assembler
 		varStartAddress = nextAddress;
 	}
 	
-	/** getAddress() *******************************************************
+	/************************************************************************************
 	 *  Returns the address associated with the symbol.
 	 ***********************************************************************************/
 	public static int getAddress( String symbol )
@@ -106,13 +106,14 @@ public class Assembler
 		return m_symbolTable.get( symbol );
 	}
 
-	/** run() ***************************************************************************
+	/************************************************************************************
 	 *  This is the implementation of the assembler. It contains a timer accurate to
 	 *  the nano-second to measure the assembler's performance.
 	 ***********************************************************************************/
 	public static void run( String fileName )
 	{
 		System.out.println( "Starting assembler..." );
+		
 		// Initialize the symbol table
 		init();
 		
@@ -129,7 +130,7 @@ public class Assembler
 				( timerEnd - timerStart ) + "ns)\n");
 	}
 
-	/** firstPass() *********************************************************************
+	/************************************************************************************
 	 *  This builds the symbol table. It is the first pass in the assembly process.
 	 ************************************************************************************/
 	private static void firstPass( String fileName )
@@ -181,7 +182,7 @@ public class Assembler
 				( timerEnd - timerStart ) + "ns)");
 	}
 
-	/** secondPass() ********************************************************************
+	/************************************************************************************
 	 *  This builds the entire output using information from the symbol table.
 	 ************************************************************************************/
 	private static void secondPass( String fileName )
@@ -325,5 +326,4 @@ public class Assembler
 		System.out.println( "Second pass completed! (elapsed time: " +
 				( timerEnd - timerStart ) + "ns)");
 	}
-
 }
